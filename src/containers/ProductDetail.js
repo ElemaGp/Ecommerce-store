@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {useParams} from "react-router-dom";
-import { selectedProduct } from "../redux/actions/productActions";
+import { selectedProduct, removeSelectedProduct } from "../redux/actions/productActions";
 
 const ProductDetail = () => {
     const product = useSelector((state) => state.product); //using the "useSelector" so i can access the product here. I wrote "state.product" here because in the "selectedProduct" action, the payload is "product" and more importantly, in the combinedReducer indexjs, i wrote "product": selectedProductReducer.
@@ -21,7 +21,10 @@ const ProductDetail = () => {
         };
 
         useEffect(() => {
-            if (productId && productId !== "") fetchProductDetail(); //if we have a productId and the productId is not equal to an empty string, wthis useEffect calls the fetchProductDetail function.
+            if (productId && productId !== "") fetchProductDetail(); //if we have a productId and the productId is not equal to an empty string, this useEffect calls the fetchProductDetail function above.
+          return () => {
+            dispatch(removeSelectedProduct()); //when we leave the page of the selectedProduct, it means theres no productId so this dispatch action unmounts the selectedProduct. This cleanup function action is useful so that when we go to another selectedProduct, it wouldn't show the previous selectedProduct we viewed for a split-second before showing the one we just clicked on.
+          }
         }, [productId]);
 
     return(

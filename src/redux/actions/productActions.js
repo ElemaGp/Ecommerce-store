@@ -15,3 +15,9 @@ export const selectedProduct = (product) => {
     };
 };
 
+export const removeSelectedProduct = () => {    //for unmouting the selected product when we leave the page
+    return {
+        type: ActionTypes.REMOVE_SELECTED_PRODUCT,
+    };
+};
+
