@@ -1,6 +1,9 @@
-import { createStore } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import reducers from "./reducers/index"; //importing the combined reducers function from the index.js
+import thunk from "redux-thunk";
 
-const store = createStore(reducers, {}, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()); //the arguments are the combined reducers function you just imported and an initial empty object state. The third argument i added helps us see the state in the redux devtool extension i installed from chrome, when i "inspect" in the browser
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; //This helps us see the state in the browser redux devtool extension i installed from chrome, when i "inspect" in the browser. I copied it from the official redux github readme.
+
+const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk))); //the arguments are the combinedReducers function you just imported and and then the "thunk" middleware for making the redux actions async. 
 
 export default store;
