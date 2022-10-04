@@ -2,26 +2,19 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {useParams} from "react-router-dom";
-import { selectedProduct, removeSelectedProduct } from "../redux/actions/productActions";
+import { fetchProduct, removeSelectedProduct } from "../redux/actions/productActions";
 
 const ProductDetail = () => {
     const product = useSelector((state) => state.product); //using the "useSelector" so i can access the product here. I wrote "state.product" here because in the "selectedProduct" action, the payload is "product" and more importantly, in the combinedReducer indexjs, i wrote "product": selectedProductReducer.
     const {image, title, price, category, description} = product; //destructuring the "product" object you just fetched so you can use eg "image", "title" instead of "product.image", "product.title".
     const {productId} = useParams(); //useParams gives the value of the dynamic part of the link that links to this productDetails (eg. `/product/${id}`). In this project, it is the "id".
-    const dispatch = useDispatch(); //for dispatching the fetched value of the "product" into the redux "selectedProduct" Action
+    const dispatch = useDispatch(); //dispatching the "fetchProducts" action where the fetch occurs.
     console.log(product); //Since "productId" is equal to the useParam, it basically represents the dynamic part of the url which leads here, which is the "1","2","3" etc (basically the id of the products).
 
-    const fetchProductDetail = async() => {
-        const response = await axios
-        .get(`https://fakestoreapi.com/products/${productId}`)
-        .catch(err => {
-          console.log("Err ", err);
-        })
-        dispatch(selectedProduct(response.data)); // Putting the fetched data into the "selectedProduct" action, from where the redux has access to it for state management.  "data" is the property of the response that carries the data you need, as its value
-        };
+    
 
         useEffect(() => {
-            if (productId && productId !== "") fetchProductDetail(); //if we have a productId and the productId is not equal to an empty string, this useEffect calls the fetchProductDetail function above.
+            if (productId && productId !== "") dispatch(fetchProduct(productId)); //if we have a productId and the productId is not equal to an empty string, this useEffect calls the fetchProduct "action" function where the api fetch occurs.
           return () => {
             dispatch(removeSelectedProduct()); //when we leave the page of the selectedProduct, it means theres no productId so this dispatch action unmounts the selectedProduct. This cleanup function action is useful so that when we go to another selectedProduct, it wouldn't show the previous selectedProduct we viewed for a split-second before showing the one we just clicked on.
           }

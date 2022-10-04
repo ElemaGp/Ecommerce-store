@@ -10,6 +10,8 @@ export const productReducer = (state = initialState, {type, payload}) => { //i t
     switch (type) {
         case ActionTypes.SET_PRODUCTS:
             return {...state, products: payload}; //if the actiontype case is SET_PRODUCTS, then this productReducer fuction will return whatever values we already have in the state and then the new data which was fetched and sent to SET_PRODUCTS Actions. The newly fetched payload will be added to the "products".
+        case ActionTypes.FETCH_PRODUCTS:
+            return {...state, products: payload}; //if the actiontype case is SET_PRODUCTS, then this productReducer fuction will return whatever values we already have in the state and then the new data which was fetched and sent to SET_PRODUCTS Actions. The newly fetched payload will be added to the "products".
     
         default:
             return state;
